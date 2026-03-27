@@ -10,6 +10,7 @@ import Events from "./pages/Events";
 import Leaderboard from "./pages/Leaderboard";
 import VolunteerDashboard from "./pages/VolunteerDashboard";
 import NGODashboard from "./pages/NGODashboard";
+import EventDetails from "./pages/EventDetails";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
