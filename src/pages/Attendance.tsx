@@ -4,7 +4,12 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
 
-const mockAttendanceEvents = [
+interface AttendanceEvent {
+  id: string; event: string; ngo: string; date: string; time: string; location: string;
+  checkedIn: boolean; checkedOut: boolean; checkInTime?: string; checkOutTime?: string; totalHours?: number;
+}
+
+const mockAttendanceEvents: AttendanceEvent[] = [
   { id: "a1", event: "Community Tree Plantation Drive", ngo: "Green Earth Foundation", date: "Apr 15, 2026", time: "7:00 AM - 12:00 PM", location: "Cubbon Park, Bangalore", checkedIn: false, checkedOut: false },
   { id: "a2", event: "Code for Kids Workshop", ngo: "Digital Literacy India", date: "Apr 20, 2026", time: "10:00 AM - 4:00 PM", location: "Community Hall, Mumbai", checkedIn: true, checkedOut: false, checkInTime: "9:55 AM" },
   { id: "a3", event: "Beach Cleanup Marathon", ngo: "Ocean Warriors", date: "Mar 15, 2026", time: "6:00 AM - 10:00 AM", location: "Juhu Beach, Mumbai", checkedIn: true, checkedOut: true, checkInTime: "5:50 AM", checkOutTime: "10:05 AM", totalHours: 4.25 },
