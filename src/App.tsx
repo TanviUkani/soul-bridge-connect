@@ -10,6 +10,7 @@ import Events from "./pages/Events";
 import Leaderboard from "./pages/Leaderboard";
 import VolunteerDashboard from "./pages/VolunteerDashboard";
 import NGODashboard from "./pages/NGODashboard";
+import EventDetails from "./pages/EventDetails";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/events" element={<Events />} />
+          <Route path="/events/:id" element={<EventDetails />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/volunteer/dashboard" element={<VolunteerDashboard />} />
           <Route path="/ngo/dashboard" element={<NGODashboard />} />
