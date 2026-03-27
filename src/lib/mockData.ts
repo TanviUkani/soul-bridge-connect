@@ -151,7 +151,7 @@ export const mockStats = {
 export const mockVolunteerStats = {
   totalHours: 156,
   eventsCompleted: 12,
-  badges: 5,
+  badgeCount: 5,
   impactScore: 92,
   weeklyHours: [
     { week: "W1", hours: 8 },
