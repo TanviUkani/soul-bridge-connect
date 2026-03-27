@@ -1,5 +1,6 @@
-import { MapPin, Calendar, Users, ArrowRight } from "lucide-react";
+import { MapPin, Calendar, Users, ArrowRight, Bookmark } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useBookmarks } from "@/lib/store";
 
 interface EventCardProps {
   id: string;
@@ -18,6 +19,8 @@ interface EventCardProps {
 
 const EventCard = ({ id, title, ngo, ngoLogo, description, location, date, time, skills, volunteersNeeded, volunteersJoined, matchScore }: EventCardProps) => {
   const progress = Math.round((volunteersJoined / volunteersNeeded) * 100);
+  const { toggle, isBookmarked } = useBookmarks();
+  const bookmarked = isBookmarked(id);
 
   return (
     <div className="group glass-card rounded-xl overflow-hidden hover-lift">
@@ -32,11 +35,16 @@ const EventCard = ({ id, title, ngo, ngoLogo, description, location, date, time,
               <h3 className="font-heading font-bold text-foreground">{title}</h3>
             </div>
           </div>
-          {matchScore && (
-            <span className="px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold">
-              {matchScore}% match
-            </span>
-          )}
+          <div className="flex items-center gap-2">
+            <button onClick={() => toggle(id)} className="p-1.5 rounded-lg hover:bg-muted transition-colors" title={bookmarked ? "Remove bookmark" : "Bookmark"}>
+              <Bookmark className={`w-4 h-4 ${bookmarked ? "fill-warning text-warning" : "text-muted-foreground"}`} />
+            </button>
+            {matchScore && (
+              <span className="px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold">
+                {matchScore}% match
+              </span>
+            )}
+          </div>
         </div>
 
         <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{description}</p>
