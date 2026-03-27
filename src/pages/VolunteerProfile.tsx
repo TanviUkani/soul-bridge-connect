@@ -1,21 +1,26 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Camera, MapPin, Clock, Award, Briefcase, Save, ChevronDown, ChevronUp } from "lucide-react";
 import { skills, interests } from "@/lib/mockData";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
+import { useUser } from "@/lib/store";
 
 const timeSlots = ["9AM-12PM", "12PM-3PM", "3PM-6PM", "6PM-9PM"];
 const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const VolunteerProfile = () => {
-  const [name, setName] = useState("Priya Sharma");
-  const [email] = useState("priya@email.com");
-  const [phone, setPhone] = useState("+91 98765 43210");
-  const [address, setAddress] = useState("Bangalore, Karnataka");
-  const [bio, setBio] = useState("Passionate volunteer dedicated to education and community development. Love teaching kids coding and organizing community events.");
-  const [selectedSkills, setSelectedSkills] = useState(["Teaching", "Coding", "Event Planning"]);
-  const [selectedInterests, setSelectedInterests] = useState(["Education", "Environment", "Child Welfare"]);
+  const { user, updateUser } = useUser();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [name, setName] = useState(user?.name || "");
+  const [email] = useState(user?.email || "");
+  const [phone, setPhone] = useState(user?.phone || "");
+  const [address, setAddress] = useState(user?.address || "");
+  const [avatar, setAvatar] = useState(user?.avatar || "");
+  const [bio, setBio] = useState("Passionate volunteer dedicated to education and community development.");
+  const [selectedSkills, setSelectedSkills] = useState<string[]>(user?.skills || []);
+  const [selectedInterests, setSelectedInterests] = useState<string[]>(user?.interests || []);
   const [availability, setAvailability] = useState<Record<string, string[]>>({
     Mon: ["9AM-12PM"], Tue: ["3PM-6PM"], Wed: [], Thu: ["9AM-12PM", "3PM-6PM"],
     Fri: [], Sat: ["9AM-12PM", "12PM-3PM", "3PM-6PM"], Sun: ["9AM-12PM"],
@@ -31,7 +36,27 @@ const VolunteerProfile = () => {
     }));
   };
 
-  const save = () => toast.success("Profile saved successfully! ✅");
+  const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("Image must be under 2MB");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const base64 = ev.target?.result as string;
+      setAvatar(base64);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const save = () => {
+    updateUser({ name, phone, address, skills: selectedSkills, interests: selectedInterests, avatar });
+    toast.success("Profile saved successfully! ✅");
+  };
+
+  const initials = name ? name.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2) : "?";
 
   const experiences = [
     { title: "Tree Plantation Drive", org: "Green Earth Foundation", date: "Mar 2026", hours: 6, desc: "Planted 50 saplings in Cubbon Park" },
@@ -48,10 +73,24 @@ const VolunteerProfile = () => {
           <div className="glass-card rounded-2xl p-8 mb-6">
             <div className="flex flex-col sm:flex-row items-start gap-6">
               <div className="relative">
-                <div className="w-24 h-24 rounded-2xl bg-primary/10 flex items-center justify-center text-3xl font-bold text-primary">
-                  PS
-                </div>
-                <button className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-lg">
+                {avatar ? (
+                  <img src={avatar} alt="Profile" className="w-24 h-24 rounded-2xl object-cover" />
+                ) : (
+                  <div className="w-24 h-24 rounded-2xl bg-primary/10 flex items-center justify-center text-3xl font-bold text-primary">
+                    {initials}
+                  </div>
+                )}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleAvatarUpload}
+                />
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-lg"
+                >
                   <Camera className="w-4 h-4" />
                 </button>
               </div>
