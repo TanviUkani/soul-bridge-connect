@@ -2,10 +2,12 @@ import { mockVolunteerStats } from "@/lib/mockData";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { Clock, Calendar, Award, TrendingUp, Bell, MapPin, User, Settings } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import { useUser } from "@/lib/store";
 
 const VolunteerDashboard = () => {
   const stats = mockVolunteerStats;
-
+  const { user } = useUser();
+  const displayName = user?.name?.split(" ")[0] || "Volunteer";
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -18,7 +20,7 @@ const VolunteerDashboard = () => {
                 <User className="w-8 h-8 text-primary" />
               </div>
               <div>
-                <h1 className="font-heading text-2xl font-bold">Welcome back, Priya! 👋</h1>
+                <h1 className="font-heading text-2xl font-bold">Welcome back, {displayName}! 👋</h1>
                 <p className="text-muted-foreground">Your impact journey continues</p>
               </div>
             </div>
