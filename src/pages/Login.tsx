@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Heart, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { saveUser, getUser } from "@/lib/store";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,6 +14,18 @@ const Login = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    // Preserve existing user data if available, update email and role
+    const existing = getUser();
+    saveUser({
+      name: existing?.name || email.split("@")[0],
+      email,
+      phone: existing?.phone || "",
+      address: existing?.address || "",
+      role,
+      skills: existing?.skills || [],
+      interests: existing?.interests || [],
+      avatar: existing?.avatar || "",
+    });
     toast.success(`Logged in as ${role}!`);
     navigate(role === "volunteer" ? "/volunteer/dashboard" : "/ngo/dashboard");
   };
