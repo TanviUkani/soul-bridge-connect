@@ -42,14 +42,10 @@ Make your changes
 Submit a pull request
 📄 License
 
-This project is licensed under the MIT License.
-
 🙌 Acknowledgements
-Supabase
-React
-Open Source Community
+
+Supabase,React,Open Source Community
+
 💡 Future Improvements
-Chat system between NGO & volunteers
-AI-based matching
-Mobile app version
-Notifications system
+
+Chat system between NGO & volunteers,AI-based matching,Mobile app version,Notifications system
